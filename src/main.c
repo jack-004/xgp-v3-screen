@@ -147,8 +147,20 @@ int read_os_release(char *pretty_name, size_t pretty_name_size,
 
         if (!found_pretty_name)
         {
+            found_pretty_name = extract_env_value(line, "ZZ_DISTRIB_NAME",
+                                                  pretty_name, pretty_name_size);
+        }
+
+        if (!found_pretty_name)
+        {
             found_pretty_name = extract_env_value(line, "DISTRIB_DESCRIPTION",
                                                   pretty_name, pretty_name_size);
+        }
+
+        if (!found_build_id)
+        {
+            found_build_id = extract_env_value(line, "ZZ_DISTRIB_VERSION",
+                                               build_id, build_id_size);
         }
 
         if (!found_build_id)
