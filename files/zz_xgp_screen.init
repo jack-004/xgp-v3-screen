@@ -13,9 +13,14 @@ start_service() {
         exit 1
     fi
     procd_open_instance
-    if [ -c /dev/fb1 ]; then
-        procd_set_param env LV_LINUX_FBDEV_DEVICE=/dev/fb1
+
+    if ! grep -q "ImmortalWrt" /etc/openwrt_release 2>/dev/null; then
+        if [ -c /dev/fb1 ]; then
+            procd_set_param env LV_LINUX_FBDEV_DEVICE=/dev/fb1
+        fi
     fi
+
+    echo 0 > /sys/class/vtconsole/vtcon1/bind
     procd_set_param command "$PROG"
     procd_set_param respawn 3600 5 5
     procd_set_param stdout 1
