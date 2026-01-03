@@ -260,19 +260,19 @@ int get_first_wwan_ipv4_address(char *ip_addr, size_t ip_addr_len)
 
     for (if_entry = if_ni; if_entry->if_index != 0; if_entry++)
     {
-        // 检查是否是wwan接口 (wwan0, wwan1, wwan2等)
-        if (strncmp(if_entry->if_name, "wwan", 4) == 0)
+        // 检查是否是wwan接口 (wwan0, wwan1, wwan2等) 或 rmnet_mhi 接口
+        if (strncmp(if_entry->if_name, "wwan", 4) == 0 || strncmp(if_entry->if_name, "rmnet_mhi", 9) == 0)
         {
             if (get_interface_ipv4_address(if_entry->if_name, ip_addr, ip_addr_len) == 0)
             {
                 if_freenameindex(if_ni);
-                return 0; // 成功找到wwan接口并获取IP
+                return 0; // 成功找到接口并获取IP
             }
         }
     }
 
     if_freenameindex(if_ni);
-    return -1; // 没有找到有IP的wwan接口
+    return -1; // 没有找到有IP的接口
 }
 
 int get_nf_conntrack_count()
